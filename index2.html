@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+
+  <script type="text/babel">
+
+
+
+    //const UserInfo = (props) => {
+      const UserInfo = ({author}) => {
+     // const author = props.author;
+      const { avatarUrl, name } = author;
+      // const avatarUrl = author.avatarUrl;
+      // const name = author.name;
+
+      const styleObject = {
+        width: '200px',
+        height: 'auto'
+      }
+
+      return (
+        /* When using the style tag within JSX, you must provide an object that contains the properties you want to affect */
+        <div className="UserInfo">
+            <img className="Avatar"
+              src={avatarUrl}
+              alt={name}
+              style={styleObject}
+            />
+            <div className="UserInfo-name">
+              {name}
+            </div>
+          </div>
+      )
+    }
+
+    const CommentBody = (props) => {
+      return (
+        <span>
+          <div className="Comment-text">
+              {props.text}
+            </div>
+            <div className="Comment-date">
+              {props.date}
+          </div>
+        </span>
+      )
+    }
+
+    const Comment = (props) => {
+      return (
+        <div className="Comment">
+          <UserInfo author={props.author} />
+          {/* We grab the props from the Comment, and pass them deeper into the CommentBody.*/}
+          <CommentBody text={props.text} date={props.date} />
+
+    
+        </div>
+      );
+    }
+
+  /*
+    A note about properties : 
+      React is a pretty forgiving library in what it allows you to do. 
+      However, one of the rules you MUST follow is that components may not change their own props. You can use any way you please(such as by copying them into a new variable) so long as their values are not directly mutated.
+
+    State: 
+      The first thing to keep in mind about state is that it cannot be directly mutated. This is due to the fact when state is changed or mutated directly, the component will not rerender. 
+
+      setState is the method for changing state within a component, and is how React tells that component to rerender.
+  
+  */
+
+  class App extends React.Component {
+    state = {
+      name: 'Jeff34',
+      text: 'This is a comment text from state.'
+    }
+
+    changeName(){
+   //   this.state.name = 'Jeff';
+
+      // setState takes an object as a parameter
+      // This object includes the pieces of the state to update. You do not have to update the entire state state at once. After setState is called, a reRender will occur.
+      this.setState({ name: 'Jeff'});
+    }
+
+    render(){
+//      this.state.name = 'Rob'; // This technically work
+
+      return ( 
+        <div>
+          <h1>{this.props.myProp}</h1>
+          <Comment author={{name: this.state.name, avatarUrl: 'https://source.unsplash.com/5'}} text={'This is a comment text.'} date={new Date().toLocaleTimeString()}/>
+          <button onClick={this.changeName.bind(this)}>Change Name to Jeff</button>
+        </div>
+        );
+      }
+  }
+
+
+    ReactDOM.render(<App myProp={'Properties from the outside'}/>, document.querySelector('#root'));
+  
+  
+  
+  
+</script>
+
+</body>
+
+</html>

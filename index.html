@@ -71,6 +71,58 @@
       return (<button onClick={props.onClick}>{props.children}</button>)
     }
 
+    //const UserInfo = (props) => {
+    const UserInfo = ({author}) => {
+     // const author = props.author;
+      const { avatarUrl, name } = author;
+      // const avatarUrl = author.avatarUrl;
+      // const name = author.name;
+
+      const styleObject = {
+        width: '200px',
+        height: 'auto'
+      }
+
+      return (
+        /* When using the style tag within JSX, you must provide an object that contains the properties you want to affect */
+        <div className="UserInfo">
+            <img className="Avatar"
+              src={avatarUrl}
+              alt={name}
+              style={styleObject}
+            />
+            <div className="UserInfo-name">
+              {name}
+            </div>
+          </div>
+      )
+    }
+
+    const CommentBody = (props) => {
+      return (
+        <span>
+          <div className="Comment-text">
+              {props.text}
+            </div>
+            <div className="Comment-date">
+              {props.date}
+          </div>
+        </span>
+      )
+    }
+
+    const Comment = (props) => {
+      return (
+        <div className="Comment">
+          <UserInfo author={props.author} />
+          {/* We grab the props from the Comment, and pass them deeper into the CommentBody.*/}
+          <CommentBody text={props.text} date={props.date} />
+
+    
+        </div>
+      );
+    }
+
     class App extends React.Component {
 
       onClick(message) {
@@ -84,6 +136,7 @@
           { /* <button onClick={this.onClick.bind(this, 'Hello')}>Click me</button> */}
           {/* Alernate way to define a property that is a method: */}
             <HelloButton onClick={this.onClick.bind(this, 'Hello from class function')}>Click me</HelloButton>
+            <Comment author={{name: 'Jeff', avatarUrl: 'https://source.unsplash.com/5'}} text={'This is a comment text.'} date={new Date().toLocaleTimeString()}/>
           </div>
           );
       }
