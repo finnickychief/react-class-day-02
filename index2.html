@@ -86,31 +86,93 @@
   */
 
   class App extends React.Component {
-    state = {
-      name: 'Jeff34',
-      text: 'This is a comment text from state.'
+    constructor(props){
+      super(props); // In object oriented programming, you have to call the constructor of the parent class when you are inheriting from it.
+
+      // Common example of object inheritance:
+      /*
+                  Shape(size)
+        Rectangle(inherits from Shape, has access to size any other properties)
+        Circle(inherits from Shape)
+
+        Square(inherits from rectangle)
+        Sphere(inherits from Circle)
+
+        So our App that extends React.Component gains access to the methods and properties within React.Component. This also means that we have to use the constructor of React.component when we define our own.
+      */
+
+      this.state = {
+        name: 'Jeff In State from constructor',
+        text: 'Comment from state in constructor',
+        input1: 3,
+        firstName: 'Jeff',
+        lastName: 'Patton',
+        fullName: 'Jeff Patton'
+      }
+
+
     }
+// Settings state outside of constructor
+    // state = {
+    //   name: 'Jeff34',
+    //   text: 'This is a comment text from state.'
+    // }
 
     changeName(){
-   //   this.state.name = 'Jeff';
+   //   this.state.name = 'Jeff'; // This does not work because changing the state directly does not cause a rerender.
 
       // setState takes an object as a parameter
       // This object includes the pieces of the state to update. You do not have to update the entire state state at once. After setState is called, a reRender will occur.
+      console.log(this.state.input1)
       this.setState({ name: 'Jeff'});
     }
 
+    // onChange = (e) => {
+    //   this.setState({
+    //     [e.target.name]: e.target.value
+    //   })
+    //   console.log(this.state.input1)
+    // }
+
+    onChange = (e) => this.setState({[e.target.name]: e.target.value});
+
+    onSubmit = (e) => {
+      e.preventDefault(); // This prevents the default behavior of the event, which in this case would be a form submission. Now you can run whatever other code you want and not be afraid of losing your state after the page would have reloaded.
+    }
+
     render(){
-//      this.state.name = 'Rob'; // This technically work
+//      this.state.name = 'Rob'; // This technically works because it happens before the render is output.
+
+      const { name, text } = this.state;
 
       return ( 
         <div>
           <h1>{this.props.myProp}</h1>
-          <Comment author={{name: this.state.name, avatarUrl: 'https://source.unsplash.com/5'}} text={'This is a comment text.'} date={new Date().toLocaleTimeString()}/>
+          <Comment author={{name: name, avatarUrl: 'https://source.unsplash.com/5'}} text={text} date={new Date().toLocaleTimeString()}/>
           <button onClick={this.changeName.bind(this)}>Change Name to Jeff</button>
+
+          
+
+          <form onSubmit={this.onSubmit}>
+            <input type="text" name="firstName" value={this.state.firstName} onChange={this.onChange} />
+            <input type="text" name="lastName" value={this.state.lastName} onChange={this.onChange} />
+            <button>Submit</button>
+          </form>
+
         </div>
         );
       }
   }
+// When we use our state within a field on an editable element, they become "controlled" components. This means they pull their values from pieces of the application that do not have an inherent way to change, so you cannot update their values from the webpage directly.
+// One way to get around this is defaultValue. This will allow you to edit the value, but the changes will not be reflected in the application's actual state. You will need to grab that value again when you want to use it.
+
+// In order to have a field that is tied to state and updates the state directly, you must provide an onChange
+// Data flows downwards. 
+// Neither parent or child components know if their parents or children are 'stateful' or 'stateless', and should not care whether it is defined as a class or a function. 
+
+// This is why state is called local, because it is not accessible by any other components on the page. Only the component that the state belongs do may modify it, and view it directly. You can pass state as props to other components, but never directly modify it.
+   
+
 
 
     ReactDOM.render(<App myProp={'Properties from the outside'}/>, document.querySelector('#root'));
