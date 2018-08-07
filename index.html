@@ -16,18 +16,87 @@
   <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
 
+  <script type="text/babel">
+    // Function components:
+    /*
+      Functional components are those that contain very little or no logic. 
+      They derive most of their meaning through the properties that are passed in by their parent. 
+      Even if there are no or very few custom properties they can useful to separate out code that can be re-used, and keep your primary rendering files clean. 
+    */
+
+    // function WelcomeList(props){
+    //   return (
+    //     <div>
+    //       <h1>Sarah</h1>
+    //       <h1>Joe</h1>
+    //       <h1>Rob</h1>
+    //     </div>
+    //   )
+    // }
+
+    // const WelcomeList = (props) => {
+    //   return (
+    //     <div>
+    //       <h1>Sarah</h1>
+    //       <h1>Joe</h1>
+    //       <h1>Rob</h1>
+    //     </div>
+    //   )
+    // }
+
+    // When you return from a functional component(or the render method of a class-based component), you must return only one top level item. In this case, it's the div being returned and the h1 elements are children of the div.
+
+
+    // Components(functional or class based) must start with a capital letter, due to how it is transpiled in Babel. If it sees a lowercase tag name, it will use quotes around the name when it creates the element. With uppercase, it will use the actual function.
+
+    // WelcomeList v2
+
+    const Welcome = (props) => {
+      return (<h1>{props.name}</h1>)
+    }
+
+    const WelcomeList = (props) => {
+      return (
+        <div>
+          <Welcome name="Sarah"/>
+          <Welcome name="Joe"/>
+          <Welcome name="Rob"/>
+        </div>
+      )
+    }
+    // Class-based components must extend the React.component class. This means that it inherits from the React.component class, and has access to all of the methods within.
+
+    // Of these methods, the render is the most important. This function perform the same job as a functional component, but you can leverage the other characteristics of a class such as defining methods that are only contained within that class, and passing the state or methods of the class down to child elements.
+    const HelloButton = (props) => {
+      return (<button onClick={props.onClick}>{props.children}</button>)
+    }
+
+    class App extends React.Component {
+
+      onClick(message) {
+        alert(message);
+      }
+
+      render(){
+        return ( 
+          <div>
+            <h1>{this.props.myProp}</h1>
+          { /* <button onClick={this.onClick.bind(this, 'Hello')}>Click me</button> */}
+          {/* Alernate way to define a property that is a method: */}
+            <HelloButton onClick={this.onClick.bind(this, 'Hello from class function')}>Click me</HelloButton>
+          </div>
+          );
+      }
+    }
 
 
 
-  <script type="text/babel"></script>
-
-
-
-
-
-
-
-
+    ReactDOM.render(<App myProp={'Properties from the outside'}/>, document.querySelector('#root'));
+  
+  
+  
+  
+  </script>
 
 
 </body>
